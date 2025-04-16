@@ -44,6 +44,9 @@ function Profile() {
       <div className="container">
         <div className="left-part">
           {isMyProfile && <CreatePost />}
+          {!isMyProfile && userProfile?.posts?.length === 0 && (
+            <p className="no-posts">No posts yet.</p>
+          )}
           {userProfile?.posts?.map((post) => (
             <Post key={post._id} post={post} />
           ))}

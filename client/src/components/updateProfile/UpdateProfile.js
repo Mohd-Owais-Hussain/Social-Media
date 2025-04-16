@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./UpdateProfile.scss";
 import dummyUserImg from "../../assets/user.png";
+import ConfirmAccountDeletion from "../confirm-account-deletion/ConfirmAccountDeletion";
 import { useSelector, useDispatch } from "react-redux";
 import { updateMyProfile } from "../../redux/slices/appConfigSlice";
-import { axiosClient } from "../../utils/axiosClient";
-import { useNavigate } from "react-router-dom";
-import { KEY_ACCESS_TOKEN, removeItem } from "../../utils/localStorageManager";
 
 function UpdateProfile() {
   const myProfile = useSelector((state) => state.appConfigReducer.myProfile);
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [userImg, setUserImg] = useState("");
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     setName(myProfile?.name || "");
@@ -23,13 +21,15 @@ function UpdateProfile() {
 
   function handleImageChange(e) {
     const file = e.target.files[0];
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-    fileReader.onload = () => {
-      if (fileReader.readyState === fileReader.DONE) {
-        setUserImg(fileReader.result);
-      }
-    };
+    if (file) {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        if (fileReader.readyState === fileReader.DONE) {
+          setUserImg(fileReader.result);
+        }
+      };
+    }
   }
 
   function handleSubmit(e) {
@@ -41,16 +41,6 @@ function UpdateProfile() {
         userImg,
       })
     );
-  }
-
-  async function handleDeleteAccount() {
-    try {
-      await axiosClient.delete("/user/");
-      removeItem(KEY_ACCESS_TOKEN);
-      navigate("/login");
-    } catch (e) {
-      console.log(e);
-    }
   }
 
   return (
@@ -92,12 +82,17 @@ function UpdateProfile() {
           </form>
           <button
             className="delete-account btn-primary"
-            onClick={handleDeleteAccount}
+            onClick={() => setIsDeleteConfirmOpen(!isDeleteConfirmOpen)}
           >
             Delete Account
           </button>
         </div>
       </div>
+      {isDeleteConfirmOpen && (
+        <ConfirmAccountDeletion
+          closeModal={() => setIsDeleteConfirmOpen(!isDeleteConfirmOpen)}
+        />
+      )}
     </div>
   );
 }

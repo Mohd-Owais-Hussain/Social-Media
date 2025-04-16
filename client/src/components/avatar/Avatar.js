@@ -1,6 +1,6 @@
 import React from "react";
 import userImg from "../../assets/user.png";
-import './Avatar.scss'
+import "./Avatar.scss";
 
 function Avatar({ src }) {
   return (

@@ -1,10 +1,11 @@
 .Navbar {
   width: 100%;
-  position: fixed;
+  position: sticky;
   background-color: white;
   top: 0;
   height: 60px;
   border-bottom: 1px solid var(--border-color);
+  z-index: 99;
 
   .container {
     height: 100%;

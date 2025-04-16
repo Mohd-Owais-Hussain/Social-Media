@@ -13,9 +13,7 @@ function Home() {
   return (
     <>
       <Navbar />
-      <div className="outlet" style={{ marginTop: "60px" }}>
-        <Outlet />
-      </div>
+      <Outlet />
     </>
   );
 }

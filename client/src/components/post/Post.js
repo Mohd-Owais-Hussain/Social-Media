@@ -12,11 +12,11 @@ function Post({ post }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  async function handlePostLiked() {
+  function handlePostLiked() {
     dispatch(
       showToast({
         type: TOAST_SUCCESS,
-        message: "liked or unliked",
+        message: post.isLiked === true ? "Post Unliked" : "Post Liked",
       })
     );
     dispatch(
@@ -36,7 +36,7 @@ function Post({ post }) {
         <h4>{post.owner?.name}</h4>
       </div>
       <div className="content">
-        <img src={post?.image?.url} alt="" />
+        <img src={post?.image?.url} alt="post image" />
       </div>
       <div className="footer">
         <div className="like" onClick={handlePostLiked}>

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import "./Signup.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
+import { KEY_ACCESS_TOKEN, setItem } from "../../utils/localStorageManager";
 
 function Signup() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,12 +13,18 @@ function Signup() {
   async function handleSubmit(e) {
     try {
       e.preventDefault();
-      const result = await axiosClient.post("/auth/signup", {
+      await axiosClient.post("/auth/signup", {
         name,
         email,
         password,
       });
-      console.log(result);
+
+      const response = await axiosClient.post("/auth/login", {
+        email,
+        password,
+      });
+      setItem(KEY_ACCESS_TOKEN, response.result.accessToken);
+      navigate("/");
     } catch (e) {
       console.log(e);
     }

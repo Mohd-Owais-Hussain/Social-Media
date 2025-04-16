@@ -1,0 +1,131 @@
+.ConfirmAccountDeletion {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color: #000000, $alpha: 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 110;
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .confirm-container {
+    max-width: 500px;
+    height: fit-content;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 2;
+
+    .header {
+      background-color: var(--accent-color);
+      font-size: 1.7rem;
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .close-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+        border: none;
+        color: white;
+        background-color: var(--accent-color);
+        cursor: pointer;
+
+        &:hover {
+          color: #ccc;
+        }
+
+        &:active {
+          color: white;
+        }
+      }
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 10px 20px;
+      text-align: center;
+
+      .warning {
+        font-size: 1.3rem;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: space-between;
+
+        .btn {
+          display: flex;
+          width: 35%;
+          gap: 8px;
+          justify-content: center;
+          align-items: center;
+          font-size: 1.3rem;
+          padding: 10px;
+          border-radius: 5px;
+          cursor: pointer;
+
+          .btn-icon {
+            display: flex;
+            font-size: 1.5rem;
+          }
+        }
+
+        .cancel-btn {
+          color: red;
+          border: 2px solid red;
+          background-color: #ffdbdb;
+
+          &:hover {
+            color: #ce0000;
+            border: 2px solid #ce0000;
+            background-color: #ffabab;
+          }
+
+          &:active {
+            color: red;
+            border: 2px solid red;
+            background-color: #ffdbdb;
+          }
+        }
+
+        .ok-btn {
+          color: limegreen;
+          border: 2px solid limegreen;
+          background-color: #dbffdb;
+
+          &:hover {
+            color: #28a528;
+            border: 2px solid #28a528;
+            background-color: #abffab;
+          }
+
+          &:active {
+            color: limegreen;
+            border: 2px solid limegreen;
+            background-color: #dbffdb;
+          }
+        }
+      }
+    }
+  }
+}

@@ -35,12 +35,16 @@ axiosClient.interceptors.response.use(
     const statusCode = data.statusCode;
     const error = data.message;
 
-    store.dispatch(
-      showToast({
-        type: TOAST_FAILURE,
-        message: error,
-      })
-    );
+    console.log("error message->", error);
+    
+    if (error !== "Invalid access key") {
+      store.dispatch(
+        showToast({
+          type: TOAST_FAILURE,
+          message: error,
+        })
+      );
+    }
 
     if (statusCode === 401 && !originalRequest._retry) {
       const response = await axios

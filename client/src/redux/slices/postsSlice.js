@@ -6,7 +6,11 @@ export const getUserProfile = createAsyncThunk(
   async (body) => {
     try {
       const response = await axiosClient.post("/user/getUserProfile", body);
-      return response.result;
+      if (response.data) {
+        return response.data.result;
+      } else {
+        return response.result;
+      }
     } catch (e) {
       return Promise.reject(e);
     }
@@ -18,7 +22,11 @@ export const likeAndUnlikePost = createAsyncThunk(
   async (body) => {
     try {
       const response = await axiosClient.post("/posts/like", body);
-      return response.result.post;
+      if (response.data) {
+        return response.data.result.post;
+      } else {
+        return response.result.post;
+      }
     } catch (e) {
       return Promise.reject(e);
     }

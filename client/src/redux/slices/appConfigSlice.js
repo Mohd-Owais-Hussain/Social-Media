@@ -4,8 +4,11 @@ import { axiosClient } from "../../utils/axiosClient";
 export const getMyInfo = createAsyncThunk("user/getMyInfo", async () => {
   try {
     const response = await axiosClient.get("/user/getMyInfo");
-    console.log("api called data", response);
-    return response.result;
+    if (response.data) {
+      return response.data.result;
+    } else {
+      return response.result;
+    }
   } catch (e) {
     return Promise.reject(e);
   }
@@ -16,7 +19,11 @@ export const updateMyProfile = createAsyncThunk(
   async (body) => {
     try {
       const response = await axiosClient.put("/user/", body);
-      return response.result;
+      if (response.data) {
+        return response.data.result;
+      } else {
+        return response.result;
+      }
     } catch (e) {
       return Promise.reject(e);
     }

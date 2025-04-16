@@ -9,7 +9,8 @@ const createPostController = async (req, res) => {
     const { caption, postImg } = req.body;
 
     if (!caption || !postImg) {
-      return res.send(error(400, "Caption and postImg are required"));
+      console.log("hehehe");
+      return res.send(error(400, "Both Caption and Image are required"));
     }
 
     const cloudImg = await cloudinary.uploader.upload(postImg, {

@@ -79,7 +79,6 @@ const getMyPosts = async (req, res) => {
     }).populate("likes");
     return res.send(success(200, { allUserPosts }));
   } catch (e) {
-    console.log(e);
     return res.send(500, e.message);
   }
 };
@@ -146,6 +145,7 @@ const deleteMyProfile = async (req, res) => {
 const getMyInfo = async (req, res) => {
   try {
     const user = await User.findById(req._id);
+
     return res.send(success(200, { user }));
   } catch (e) {
     return res.send(error(500, e.message));

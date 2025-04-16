@@ -14,18 +14,20 @@ function CreatePost() {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-    fileReader.onload = () => {
-      if (fileReader.readyState === fileReader.DONE) {
-        setPostImg(fileReader.result);
-      }
-    };
+    if (file) {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        if (fileReader.readyState === fileReader.DONE) {
+          setPostImg(fileReader.result);
+        }
+      };
+    }
   };
 
   const handlePostSubmit = async () => {
     try {
-      const result = await axiosClient.post("/posts", {
+      await axiosClient.post("/posts", {
         caption,
         postImg,
       });
@@ -44,14 +46,15 @@ function CreatePost() {
 
   return (
     <div className="CreatePost">
-      <div className="left-part">
+      <div className="avatar">
         <Avatar src={myProfile?.avatar?.url} />
       </div>
-      <div className="right-part">
+      <div className="create-post-inputs">
         <input
           type="text"
           className="captionInput"
           placeholder="What's on your mind?"
+          value={caption}
           onChange={(e) => setCaption(e.target.value)}
         />
         {postImg && (
