@@ -11,7 +11,7 @@ module.exports = async () => {
 
     console.log(`Connected to MongoDB: ${connect.connection.host}`);
   } catch (e) {
-    console.log(e);
+    console.log("Error -> ", e);
     process.exit(1);
   }
 };

@@ -9,7 +9,6 @@ const createPostController = async (req, res) => {
     const { caption, postImg } = req.body;
 
     if (!caption || !postImg) {
-      console.log("hehehe");
       return res.send(error(400, "Both Caption and Image are required"));
     }
 
@@ -88,9 +87,9 @@ const updatePostController = async (req, res) => {
   }
 };
 
-const deletePost = async (req, res) => {
+const deletePostController = async (req, res) => {
   try {
-    const { postId } = req.body;
+    const { postId } = req.query;
     const curUserId = req._id;
 
     const post = await Post.findById(postId);
@@ -109,7 +108,7 @@ const deletePost = async (req, res) => {
     await curUser.save();
     await post.deleteOne();
 
-    return res.send(success(200, "post deleted successfully"));
+    return res.send(success(200, post._id));
   } catch (e) {
     return res.send(error(500, e.message));
   }
@@ -119,5 +118,5 @@ module.exports = {
   createPostController,
   likeAndUnlikePost,
   updatePostController,
-  deletePost,
+  deletePostController,
 };

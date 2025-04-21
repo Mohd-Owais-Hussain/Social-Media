@@ -4,11 +4,16 @@ import "./Follower.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { followAndUnfollowUser } from "../../redux/slices/feedSlice";
 import { useNavigate } from "react-router-dom";
+import { showToast } from "../../redux/slices/appConfigSlice";
+import { TOAST_SUCCESS } from "../../App";
 
 function Follower({ user }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const feedData = useSelector((state) => state.feedDataReducer.feedData);
+  const myProfileId = useSelector(
+    (state) => state.appConfigReducer.myProfile?._id
+  );
   const [isFollowing, setIsFollowing] = useState();
 
   useEffect(() => {
@@ -16,6 +21,14 @@ function Follower({ user }) {
   }, [feedData]);
 
   function handleUserFollow() {
+    dispatch(
+      showToast({
+        type: TOAST_SUCCESS,
+        message: `You ${
+          user.followers.includes(myProfileId) ? "unfollowed" : "followed"
+        } ${user?.name}`,
+      })
+    );
     dispatch(
       followAndUnfollowUser({
         userIdToFollow: user._id,

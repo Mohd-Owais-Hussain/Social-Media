@@ -6,6 +6,7 @@
     .left-part {
       flex: 2;
       overflow-y: auto;
+      margin-bottom: 20px;
 
       .no-posts {
         margin-top: 20px;
@@ -54,6 +55,9 @@
 
         .follow-link {
           color: var(--accent-color);
+          padding: 10px 32px;
+          border-radius: 4px;
+          border: 1px solid var(--border-color);
         }
       }
     }

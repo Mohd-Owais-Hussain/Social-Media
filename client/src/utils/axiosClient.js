@@ -35,8 +35,6 @@ axiosClient.interceptors.response.use(
     const statusCode = data.statusCode;
     const error = data.message;
 
-    console.log("error message->", error);
-    
     if (error !== "Invalid access key") {
       store.dispatch(
         showToast({

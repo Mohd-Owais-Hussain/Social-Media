@@ -33,6 +33,36 @@ export const likeAndUnlikePost = createAsyncThunk(
   }
 );
 
+export const updatePost = createAsyncThunk("post/update", async (body) => {
+  try {
+    const response = await axiosClient.put("/posts/", {
+      ...body,
+    });
+    if (response.data) {
+      return response.data.result.post;
+    } else {
+      return response.result.post;
+    }
+  } catch (e) {
+    return Promise.reject(e);
+  }
+});
+
+export const deletePost = createAsyncThunk("post/delete", async (body) => {
+  try {
+    const response = await axiosClient.delete("/posts/", {
+      params: { postId: body },
+    });
+    if (response.data) {
+      return response.data.result;
+    } else {
+      return response.result;
+    }
+  } catch (e) {
+    return Promise.reject(e);
+  }
+});
+
 const postsSlice = createSlice({
   name: "postsSlice",
   initialState: {
@@ -50,6 +80,24 @@ const postsSlice = createSlice({
         );
         if (index != undefined && index != -1) {
           state.userProfile.posts[index] = post;
+        }
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        const post = action.payload;
+        const index = state?.userProfile?.posts?.findIndex(
+          (item) => item._id === post._id
+        );
+        if (index != undefined && index != -1) {
+          state.userProfile.posts[index].caption = post.caption;
+        }
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        const postId = action.payload;
+        const index = state?.userProfile?.posts?.findIndex(
+          (post) => post._id === postId
+        );
+        if (index != undefined && index != -1) {
+          state.userProfile.posts.splice(index, 1);
         }
       });
   },

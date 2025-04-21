@@ -20,29 +20,25 @@ function Navbar() {
     } catch (e) {}
   }
 
-  console.log(location.pathname);
-
   return (
     <div className="Navbar">
       <div className="container">
         <h2
           className="banner hover-link"
-          onClick={() => {
-            if (location.pathname !== "/") {
-              navigate("/");
-            }
-          }}
+          onClick={() =>
+            location.pathname !== "/" ? navigate("/") : navigate(0)
+          }
         >
           Social Media
         </h2>
         <div className="right-side">
           <div
             className="profile hover-link"
-            onClick={() => {
-              if (location.pathname !== `/profile/${myProfile?._id}`) {
-                navigate(`/profile/${myProfile?._id}`);
-              }
-            }}
+            onClick={() =>
+              location.pathname !== `/profile/${myProfile?._id}`
+                ? navigate(`/profile/${myProfile?._id}`)
+                : navigate(0)
+            }
           >
             <Avatar src={myProfile?.avatar?.url} />
           </div>

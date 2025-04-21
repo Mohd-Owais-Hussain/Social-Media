@@ -1,26 +1,11 @@
 import React from "react";
-import "./ConfirmAccountDeletion.scss";
+import "./ConfirmDeletion.scss";
 import { IoClose } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa6";
-import { axiosClient } from "../../utils/axiosClient";
-import { KEY_ACCESS_TOKEN, removeItem } from "../../utils/localStorageManager";
-import { useNavigate } from "react-router-dom";
 
-function ConfirmAccountDeletion({ closeModal }) {
-  const navigate = useNavigate();
-
-  async function handleDeleteAccount() {
-    try {
-      await axiosClient.delete("/user/");
-      removeItem(KEY_ACCESS_TOKEN);
-      navigate("/login");
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
+function ConfirmDeletion({ closeModal, warning, deleteFunction }) {
   return (
-    <div className="ConfirmAccountDeletion">
+    <div className="ConfirmDeletion">
       <div className="overlay" onClick={closeModal}></div>
       <div className="confirm-container">
         <div className="header">
@@ -30,9 +15,7 @@ function ConfirmAccountDeletion({ closeModal }) {
           </button>
         </div>
         <div className="info">
-          <p className="warning">
-            Are you sure you want to delete your Account? This can't be undone.
-          </p>
+          <p className="warning">{warning}</p>
           <div className="buttons">
             <button className="btn cancel-btn" onClick={closeModal}>
               <div className="btn-icon">
@@ -40,7 +23,13 @@ function ConfirmAccountDeletion({ closeModal }) {
               </div>
               <div className="btn-text">Cancel</div>
             </button>
-            <button className="btn ok-btn" onClick={handleDeleteAccount}>
+            <button
+              className="btn ok-btn"
+              onClick={() => {
+                closeModal();
+                deleteFunction();
+              }}
+            >
               <div className="btn-icon">
                 <FaCheck />
               </div>
@@ -53,4 +42,4 @@ function ConfirmAccountDeletion({ closeModal }) {
   );
 }
 
-export default ConfirmAccountDeletion;
+export default ConfirmDeletion;

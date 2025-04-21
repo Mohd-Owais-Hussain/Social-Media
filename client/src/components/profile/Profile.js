@@ -6,7 +6,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import CreatePost from "../createPost/CreatePost";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../../redux/slices/postsSlice";
-import { followAndUnfollowUser } from "../../redux/slices/feedSlice";
+import {
+  followAndUnfollowUser,
+  getFeedData,
+} from "../../redux/slices/feedSlice";
+import { showToast } from "../../redux/slices/appConfigSlice";
+import { TOAST_SUCCESS } from "../../App";
 
 function Profile() {
   const navigate = useNavigate();
@@ -24,7 +29,10 @@ function Profile() {
         userId: params.userId,
       })
     );
+    dispatch(getFeedData());
+  }, [params.userId, dispatch]);
 
+  useEffect(() => {
     setIsMyProfile(myProfile?._id === params.userId);
     setIsFollowing(
       feedData?.followings?.find((item) => item._id === params.userId)
@@ -33,10 +41,26 @@ function Profile() {
 
   function handleUserFollow() {
     dispatch(
+      showToast({
+        type: TOAST_SUCCESS,
+        message: `You ${
+          userProfile.followers.includes(myProfile?._id)
+            ? "unfollowed"
+            : "followed"
+        } ${userProfile?.name}`,
+      })
+    );
+    dispatch(
       followAndUnfollowUser({
         userIdToFollow: params.userId,
       })
-    );
+    ).then(() => {
+      dispatch(
+        getUserProfile({
+          userId: params.userId,
+        })
+      );
+    });
   }
 
   return (

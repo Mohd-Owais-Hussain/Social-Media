@@ -37,7 +37,7 @@ function CreatePost() {
         })
       );
     } catch (e) {
-      console.log(e);
+      console.log("Error -> ", e);
     } finally {
       setCaption("");
       setPostImg("");

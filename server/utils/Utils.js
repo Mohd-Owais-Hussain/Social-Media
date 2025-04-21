@@ -9,6 +9,7 @@ const mapPostOutput = (post, userId) => {
       _id: post.owner._id,
       name: post.owner.name,
       avatar: post.owner.avatar,
+      followers: post.owner.followers,
     },
     likesCount: post.likes.length,
     isLiked: post.likes.includes(userId),

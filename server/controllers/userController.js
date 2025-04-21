@@ -64,7 +64,6 @@ const getPostsOfFollowing = async (req, res) => {
         $nin: followingsIds,
       },
     });
-
     return res.send(success(200, { ...curUser._doc, suggestions, posts }));
   } catch (e) {
     return res.send(error(500, e.message));

@@ -19,7 +19,7 @@ function Login() {
       setItem(KEY_ACCESS_TOKEN, response.result.accessToken);
       navigate("/");
     } catch (e) {
-      console.log(e);
+      console.log("Error -> ", e);
     }
   }
 

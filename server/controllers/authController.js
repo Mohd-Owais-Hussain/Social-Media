@@ -44,7 +44,7 @@ const loginController = async (req, res) => {
 
     const matched = await bcrypt.compare(password, user.password);
     if (!matched) {
-      return res.send(error(403, "Incorrect password"));
+      return res.send(error(403, "Incorrect Password"));
     }
 
     const accessToken = generateAccessToken({
@@ -107,7 +107,7 @@ const generateAccessToken = (data) => {
     });
     return token;
   } catch (e) {
-    console.log(e);
+    console.log("Error -> ", e);
   }
 };
 
@@ -118,7 +118,7 @@ const generateRefreshToken = (data) => {
     });
     return token;
   } catch (e) {
-    console.log(e);
+    console.log("Error -> ", e);
   }
 };
 

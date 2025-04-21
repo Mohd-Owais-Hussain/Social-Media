@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "./UpdateProfile.scss";
 import dummyUserImg from "../../assets/user.png";
-import ConfirmAccountDeletion from "../confirm-account-deletion/ConfirmAccountDeletion";
+import ConfirmDeletion from "../confirm-account-deletion/ConfirmDeletion";
 import { useSelector, useDispatch } from "react-redux";
 import { updateMyProfile } from "../../redux/slices/appConfigSlice";
+import { useNavigate } from "react-router-dom";
+import { axiosClient } from "../../utils/axiosClient";
+import { KEY_ACCESS_TOKEN, removeItem } from "../../utils/localStorageManager";
 
 function UpdateProfile() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const myProfile = useSelector((state) => state.appConfigReducer.myProfile);
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [userImg, setUserImg] = useState("");
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     setName(myProfile?.name || "");
@@ -41,6 +45,16 @@ function UpdateProfile() {
         userImg,
       })
     );
+  }
+
+  async function handleDeleteAccount() {
+    try {
+      await axiosClient.delete("/user/");
+      removeItem(KEY_ACCESS_TOKEN);
+      navigate("/login");
+    } catch (e) {
+      console.log("Error -> ", e);
+    }
   }
 
   return (
@@ -89,8 +103,10 @@ function UpdateProfile() {
         </div>
       </div>
       {isDeleteConfirmOpen && (
-        <ConfirmAccountDeletion
+        <ConfirmDeletion
           closeModal={() => setIsDeleteConfirmOpen(!isDeleteConfirmOpen)}
+          warning="Are you sure you want to delete your Account? This can't be undone."
+          deleteFunction={handleDeleteAccount}
         />
       )}
     </div>
