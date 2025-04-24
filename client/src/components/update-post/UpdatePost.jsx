@@ -27,7 +27,7 @@ function UpdatePost({ post, closeModal }) {
         </div>
         <div className="post-info">
           <div className="content">
-            <img src={post?.image?.url} alt="post image" />
+            <img src={post?.image?.url} alt="post" />
           </div>
 
           <form className="update-post-form" onSubmit={handlePostUpdate}>

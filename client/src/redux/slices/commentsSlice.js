@@ -104,12 +104,12 @@ const commentsSlice = createSlice({
         state.postComments.push(action.payload);
       })
       .addCase(deleteComment.fulfilled, (state, action) => {
-        const comment = action.payload;
-        const commentId = comment._id;
+        const deletedComment = action.payload;
+        const commentId = deletedComment._id;
         const index = state?.postComments?.findIndex(
           (comment) => comment._id === commentId
         );
-        if (index != undefined && index != -1) {
+        if (index !== undefined && index !== -1) {
           state.postComments.splice(index, 1);
         }
       });

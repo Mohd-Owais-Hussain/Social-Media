@@ -12,19 +12,22 @@ import {
 } from "../../redux/slices/commentsSlice";
 import SingleComment from "../single-comment/SingleComment";
 import { deletePost } from "../../redux/slices/postsSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Comments({ post, onPostLike, closeModal }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [commentText, setCommentText] = useState("");
   const commentsData = useSelector(
     (state) => state.commentsReducer.postComments
   );
   const myProfileId = useSelector(
-    (state) => state.appConfigReducer.myProfile._id
+    (state) => state.appConfigReducer.myProfile?._id
   );
 
   function handlePostDelete() {
-    dispatch(deletePost(post._id));
+    dispatch(deletePost(post?._id));
   }
 
   function handleCommentDelete(userCommentId) {
@@ -33,12 +36,12 @@ function Comments({ post, onPostLike, closeModal }) {
 
   async function handleCreateComment(e) {
     e.preventDefault();
-    dispatch(createComment({ comment: commentText, postId: post._id }));
+    dispatch(createComment({ comment: commentText, postId: post?._id }));
     setCommentText("");
   }
 
   useEffect(() => {
-    dispatch(getPostComments(post._id));
+    dispatch(getPostComments(post?._id));
   }, [dispatch]);
 
   return (
@@ -47,12 +50,18 @@ function Comments({ post, onPostLike, closeModal }) {
 
       <div className="post-detail-container">
         <div className="post-img-container">
-          <img className="post-img" src={post?.image?.url} alt="post image" />
+          <img className="post-img" src={post?.image?.url} alt="post" />
         </div>
 
         <div className="right-side">
           <div className="header">
-            <div className="user-info">
+            <div className="user-info" onClick={() => {
+              if (location.pathname !== `/profile/${post?.owner?._id}`) {
+                navigate(`/profile/${post?.owner?._id}`);
+              } else {
+                navigate(0);
+              }
+            }}>
               <Avatar src={post?.owner?.avatar?.url} />
               <h4>{post?.owner?.name}</h4>
             </div>
@@ -114,8 +123,8 @@ function Comments({ post, onPostLike, closeModal }) {
 
             <div className="post-info">
               <div className="likes-comments-count">
-                <h4>{`${post.likesCount} likes`}</h4>
-                <h4>{`${post.commentsCount} comments`}</h4>
+                <h4>{`${post?.likesCount} likes`}</h4>
+                <h4>{`${commentsData?.length} comments`}</h4>
               </div>
               <h6 className="time-ago">{post?.timeAgo}</h6>
             </div>

@@ -52,12 +52,14 @@ const feedSlice = createSlice({
   },
   reducers: {
     updateCommentCountInFeed: (state, action) => {
-      const comment = action.payload;
+      const { comment, direction } = action.payload;
       const postIndex = state?.feedData?.posts?.findIndex(
         (post) => post._id === comment.post
       );
-      if (postIndex !== -1) {
-        state.feedData.posts[postIndex].commentsCount += 1;
+      if (postIndex !== -1 && postIndex !== undefined) {
+        direction === "increase"
+          ? (state.feedData.posts[postIndex].commentsCount += 1)
+          : (state.feedData.posts[postIndex].commentsCount -= 1);
       }
     },
   },
@@ -71,22 +73,22 @@ const feedSlice = createSlice({
         const index = state?.feedData?.posts?.findIndex(
           (item) => item._id === post._id
         );
-        if (index != undefined && index != -1) {
+        if (index !== undefined && index !== -1) {
           state.feedData.posts[index] = post;
         }
       })
       .addCase(followAndUnfollowUser.fulfilled, (state, action) => {
         const user = action.payload;
         const index = state?.feedData?.followings.findIndex(
-          (item) => item._id == user._id
+          (item) => item._id === user._id
         );
-        if (index != -1) {
+        if (index !== -1) {
           state?.feedData.followings.splice(index, 1);
           state?.feedData.suggestions.push(user);
         } else {
           state?.feedData.followings.push(user);
           const index = state?.feedData?.suggestions.findIndex(
-            (item) => item._id == user._id
+            (item) => item._id === user._id
           );
           state?.feedData.suggestions.splice(index, 1);
         }

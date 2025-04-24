@@ -19,7 +19,7 @@ function Feed() {
         <div className="left-part">
           {feedData?.posts?.length === 0 ? (
             <p className="empty-feed">
-              No posts yet! Follow others to see what they’re up to.
+              No posts yet! Follow others to see what they're up to.
             </p>
           ) : (
             feedData?.posts?.map((post) => <Post key={post._id} post={post} />)

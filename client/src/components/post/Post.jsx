@@ -113,7 +113,7 @@ function Post({ post }) {
         </ul>
       </div>
       <div className="content">
-        <img src={post?.image?.url} alt="post image" />
+        <img src={post?.image?.url} alt="post" />
       </div>
       <div className="footer">
         <div className="post-buttons">

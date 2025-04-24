@@ -95,7 +95,7 @@ const postsSlice = createSlice({
       const postIndex = state?.userProfile?.posts?.findIndex(
         (post) => post._id === comment.post
       );
-      if (postIndex !== -1) {
+      if (postIndex !== -1 && postIndex !== undefined) {
         direction === "increase"
           ? (state.userProfile.posts[postIndex].commentsCount += 1)
           : (state.userProfile.posts[postIndex].commentsCount -= 1);
@@ -112,7 +112,7 @@ const postsSlice = createSlice({
         const index = state?.userProfile?.posts?.findIndex(
           (item) => item._id === post._id
         );
-        if (index != undefined && index != -1) {
+        if (index !== undefined && index !== -1) {
           state.userProfile.posts[index] = post;
         }
       })
@@ -121,7 +121,7 @@ const postsSlice = createSlice({
         const index = state?.userProfile?.posts?.findIndex(
           (item) => item._id === post._id
         );
-        if (index != undefined && index != -1) {
+        if (index !== undefined && index !== -1) {
           state.userProfile.posts[index].caption = post.caption;
         }
       })
@@ -130,7 +130,7 @@ const postsSlice = createSlice({
         const index = state?.userProfile?.posts?.findIndex(
           (post) => post._id === postId
         );
-        if (index != undefined && index != -1) {
+        if (index !== undefined && index !== -1) {
           state.userProfile.posts.splice(index, 1);
         }
       });

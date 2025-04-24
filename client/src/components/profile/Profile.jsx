@@ -69,7 +69,7 @@ function Profile() {
             <img
               className="user-img"
               src={userProfile?.avatar?.url || dummyUserImg}
-              alt=""
+              alt="avatar"
             />
             <h3 className="user-name">{userProfile?.name}</h3>
             <p className="bio">{userProfile?.bio}</p>

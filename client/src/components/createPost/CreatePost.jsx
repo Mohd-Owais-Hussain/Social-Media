@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Avatar from "../avatar/Avatar";
 import "./CreatePost.scss";
 import { BsCardImage } from "react-icons/bs";
@@ -12,6 +12,7 @@ function CreatePost() {
   const [postImg, setPostImg] = useState("");
   const [caption, setCaption] = useState("");
   const dispatch = useDispatch();
+  const imgInputRef = useRef();
   const myProfile = useSelector((state) => state.appConfigReducer.myProfile);
 
   const handleImageChange = (e) => {
@@ -49,6 +50,9 @@ function CreatePost() {
     } finally {
       setCaption("");
       setPostImg("");
+      if (imgInputRef.current) {
+        imgInputRef.current.value = "";
+      }
     }
   };
 
@@ -79,6 +83,7 @@ function CreatePost() {
               className="inputImg"
               id="inputImg"
               type="file"
+              ref={imgInputRef}
               accept="image/*"
               onChange={handleImageChange}
             />
