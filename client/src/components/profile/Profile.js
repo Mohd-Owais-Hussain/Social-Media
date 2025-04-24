@@ -10,8 +10,6 @@ import {
   followAndUnfollowUser,
   getFeedData,
 } from "../../redux/slices/feedSlice";
-import { showToast } from "../../redux/slices/appConfigSlice";
-import { TOAST_SUCCESS } from "../../App";
 
 function Profile() {
   const navigate = useNavigate();
@@ -41,18 +39,9 @@ function Profile() {
 
   function handleUserFollow() {
     dispatch(
-      showToast({
-        type: TOAST_SUCCESS,
-        message: `You ${
-          userProfile.followers.includes(myProfile?._id)
-            ? "unfollowed"
-            : "followed"
-        } ${userProfile?.name}`,
-      })
-    );
-    dispatch(
       followAndUnfollowUser({
         userIdToFollow: params.userId,
+        myProfileId: myProfile._id,
       })
     ).then(() => {
       dispatch(
@@ -85,8 +74,8 @@ function Profile() {
             <h3 className="user-name">{userProfile?.name}</h3>
             <p className="bio">{userProfile?.bio}</p>
             <div className="follower-info">
-              <h4>{`${userProfile?.followers?.length} Followers`}</h4>
-              <h4>{`${userProfile?.followings?.length} Following`}</h4>
+              <h4>{`${userProfile?.followers?.length || 0} Followers`}</h4>
+              <h4>{`${userProfile?.followings?.length || 0} Following`}</h4>
             </div>
             {!isMyProfile && (
               <h5

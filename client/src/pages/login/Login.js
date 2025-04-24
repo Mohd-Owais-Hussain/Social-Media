@@ -17,7 +17,7 @@ function Login() {
         password,
       });
       setItem(KEY_ACCESS_TOKEN, response.result.accessToken);
-      navigate("/");
+      navigate("/home");
     } catch (e) {
       console.log("Error -> ", e);
     }

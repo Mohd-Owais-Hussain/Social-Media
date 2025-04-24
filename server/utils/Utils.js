@@ -13,10 +13,34 @@ const mapPostOutput = (post, userId) => {
     },
     likesCount: post.likes.length,
     isLiked: post.likes.includes(userId),
-    timeAgo: ta.ago(post.createdAt),
+    commentsCount: post.comments.length,
+    timeAgo:
+      ta.ago(post.createdAt).endsWith("ms ago") ||
+      ta.ago(post.createdAt).endsWith("seconds ago")
+        ? "Just now"
+        : ta.ago(post.createdAt),
+  };
+};
+
+const mapCommentOutput = (userComment) => {
+  return {
+    _id: userComment._id,
+    comment: userComment.comment,
+    owner: {
+      _id: userComment.owner._id,
+      name: userComment.owner.name,
+      avatar: userComment.owner.avatar,
+    },
+    post: userComment.post,
+    timeAgo:
+      ta.ago(userComment.createdAt).endsWith("ms ago") ||
+      ta.ago(userComment.createdAt).endsWith("seconds ago")
+        ? "Just now"
+        : ta.ago(userComment.createdAt),
   };
 };
 
 module.exports = {
   mapPostOutput,
+  mapCommentOutput,
 };

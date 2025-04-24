@@ -1,0 +1,145 @@
+.Comments {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color: #000000, $alpha: 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 110;
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .post-detail-container {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    z-index: 2;
+    display: flex;
+    height: 600px;
+    width: 1000px;
+
+    .post-img-container {
+      display: flex;
+      flex: 1;
+
+      .post-img {
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .right-side {
+      border-left: 1px solid var(--border-color);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .header {
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        height: 60px;
+        cursor: pointer;
+
+        .user-info {
+          display: flex;
+          flex: 1;
+          gap: 15px;
+          padding-left: 15px;
+          align-items: center;
+        }
+
+        .close-btn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          aspect-ratio: 1;
+          font-size: 2rem;
+
+          &:hover {
+            color: #aaa;
+          }
+
+          &:active {
+            color: black;
+          }
+        }
+      }
+
+      .comment-box {
+        flex: 1;
+        overflow: auto;
+
+        .comments-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          margin-bottom: 12px;
+
+          .post-owner-caption {
+            padding-top: 12px;
+            padding-bottom: 8px;
+            background-color: #bed8ff;
+          }
+        }
+      }
+
+      .info-footer {
+        .buttons {
+          border-top: 1px solid var(--border-color);
+          padding: 10px 15px;
+          display: flex;
+          justify-content: space-between;
+
+          .btn {
+            cursor: pointer;
+          }
+
+          .icon {
+            display: flex;
+            font-size: 1.5rem;
+          }
+        }
+
+        .post-info {
+          padding: 0px 15px 10px;
+          border-bottom: 1px solid var(--border-color);
+
+          .likes-comments-count {
+            display: flex;
+            justify-content: space-between;
+          }
+
+          .time-ago {
+            color: #aaa;
+          }
+        }
+
+        .add-comment-box {
+          display: flex;
+
+          .enter-comment-input {
+            flex: 1;
+            outline: none;
+            border: none;
+            padding: 10px 15px;
+          }
+
+          .comment-submit {
+            padding-inline: 15px;
+          }
+        }
+      }
+    }
+  }
+}

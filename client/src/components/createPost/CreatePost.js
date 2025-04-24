@@ -5,6 +5,8 @@ import { BsCardImage } from "react-icons/bs";
 import { axiosClient } from "../../utils/axiosClient";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../../redux/slices/postsSlice";
+import { showToast } from "../../redux/slices/appConfigSlice";
+import { TOAST_SUCCESS } from "../../App";
 
 function CreatePost() {
   const [postImg, setPostImg] = useState("");
@@ -31,6 +33,12 @@ function CreatePost() {
         caption,
         postImg,
       });
+      dispatch(
+        showToast({
+          type: TOAST_SUCCESS,
+          message: "Post created",
+        })
+      );
       dispatch(
         getUserProfile({
           userId: myProfile?._id,

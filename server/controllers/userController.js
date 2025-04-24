@@ -1,3 +1,4 @@
+const Comment = require("../models/Comment");
 const Post = require("../models/Post");
 const User = require("../models/User");
 const { mapPostOutput } = require("../utils/Utils");
@@ -103,30 +104,56 @@ const deleteMyProfile = async (req, res) => {
     const curUserId = req._id;
     const curUser = await User.findById(curUserId);
 
-    await Post.deleteMany({
-      owner: curUserId,
-    });
+    const userPosts = await Post.find({ owner: curUserId });
+    for (const post of userPosts) {
+      await Comment.deleteMany({ post: post._id });
+    }
 
-    curUser.followers.forEach(async (followerId) => {
+    await Post.deleteMany({ owner: curUserId });
+
+    for (const followerId of curUser.followers) {
       const follower = await User.findById(followerId);
+      if (!follower) {
+        continue;
+      }
       const index = follower.followings.indexOf(curUserId);
-      follower.followings.splice(index, 1);
+      if (index !== -1) {
+        follower.followings.splice(index, 1);
+      }
       await follower.save();
-    });
+    }
 
-    curUser.followings.forEach(async (followingId) => {
+    for (const followingId of curUser.followings) {
       const following = await User.findById(followingId);
+      if (!following) {
+        continue;
+      }
       const index = following.followers.indexOf(curUserId);
-      following.followers.splice(index, 1);
+      if (index !== -1) {
+        following.followers.splice(index, 1);
+      }
       await following.save();
-    });
+    }
 
     const allPosts = await Post.find();
-    allPosts.forEach(async (post) => {
+    const userComments = await Comment.find({ owner: curUserId });
+    const userCommentIds = userComments.map((comment) =>
+      comment._id.toString()
+    );
+
+    for (const post of allPosts) {
       const index = post.likes.indexOf(curUserId);
-      post.likes.splice(index, 1);
+      if (index !== -1) {
+        post.likes.splice(index, 1);
+      }
+
+      post.comments = post.comments.filter(
+        (commentId) => !userCommentIds.includes(commentId.toString())
+      );
       await post.save();
-    });
+    }
+
+    await Comment.deleteMany({ owner: curUserId });
 
     await curUser.deleteOne();
 

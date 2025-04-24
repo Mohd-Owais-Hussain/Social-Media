@@ -24,7 +24,7 @@ function Signup() {
         password,
       });
       setItem(KEY_ACCESS_TOKEN, response.result.accessToken);
-      navigate("/");
+      navigate("/home");
     } catch (e) {
       console.log("Error -> ", e);
     }
@@ -62,7 +62,7 @@ function Signup() {
           <input type="submit" className="submit" />
         </form>
         <p className="subheading">
-          Already have an account? <Link to="/login">Log In</Link>
+          Already have an account? <Link to="/">Log In</Link>
         </p>
       </div>
     </div>

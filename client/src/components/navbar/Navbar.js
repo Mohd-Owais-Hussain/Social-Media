@@ -16,7 +16,7 @@ function Navbar() {
     try {
       await axiosClient.post("/auth/logout");
       removeItem(KEY_ACCESS_TOKEN);
-      navigate("/login");
+      navigate("/");
     } catch (e) {}
   }
 
@@ -26,7 +26,7 @@ function Navbar() {
         <h2
           className="banner hover-link"
           onClick={() =>
-            location.pathname !== "/" ? navigate("/") : navigate(0)
+            location.pathname !== "/home" ? navigate("/home") : navigate(0)
           }
         >
           Social Media

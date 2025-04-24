@@ -60,7 +60,7 @@ axiosClient.interceptors.response.use(
         return axios(originalRequest);
       } else {
         removeItem(KEY_ACCESS_TOKEN);
-        window.location.replace("/login", "_self");
+        window.location.replace("/", "_self");
         return Promise.reject(error);
       }
     }

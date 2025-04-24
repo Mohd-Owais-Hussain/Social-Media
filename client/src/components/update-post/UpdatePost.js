@@ -3,8 +3,6 @@ import "./UpdatePost.scss";
 import { IoClose } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { showToast } from "../../redux/slices/appConfigSlice";
-import { TOAST_SUCCESS } from "../../App";
 import { updatePost } from "../../redux/slices/postsSlice";
 
 function UpdatePost({ post, closeModal }) {
@@ -13,12 +11,6 @@ function UpdatePost({ post, closeModal }) {
 
   function handlePostUpdate(e) {
     e.preventDefault();
-    dispatch(
-      showToast({
-        type: TOAST_SUCCESS,
-        message: "Post updated",
-      })
-    );
     dispatch(updatePost({ postId: post._id, caption: updatedCaption }));
     closeModal();
   }

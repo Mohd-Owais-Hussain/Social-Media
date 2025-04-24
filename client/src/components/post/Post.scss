@@ -63,6 +63,7 @@
 
   .content {
     height: 400px;
+    border-block: 1px solid var(--border-color);
 
     img {
       width: 100%;
@@ -74,15 +75,33 @@
   .footer {
     padding: 20px;
 
-    .like {
+    .post-buttons {
       display: flex;
       align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      width: fit-content;
+      justify-content: space-between;
 
-      .icon {
-        font-size: 1.5rem;
+      .like {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        width: fit-content;
+
+        .icon {
+          font-size: 1.5rem;
+        }
+      }
+
+      .comment {
+        display: flex;
+        cursor: pointer;
+        gap: 6px;
+        align-items: center;
+
+        .icon {
+          display: flex;
+          font-size: 1.5rem;
+        }
       }
     }
 

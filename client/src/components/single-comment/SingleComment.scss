@@ -1,0 +1,81 @@
+.SingleComment {
+  padding-inline: 15px;
+  display: flex;
+
+  .avatar {
+    height: fit-content;
+    border-radius: 50px;
+    cursor: pointer;
+  }
+
+  .comment-container {
+    flex: 1;
+    margin-left: 15px;
+    margin-right: 8px;
+
+    .owner-name {
+      margin-right: 9px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .info {
+      color: black;
+    }
+
+    .time-ago {
+      margin-top: 5px;
+      font-size: 0.8rem;
+    }
+  }
+
+  .more-options {
+    height: fit-content;
+    position: relative;
+
+    .menu-btn {
+      display: flex;
+      height: fit-content;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .menu {
+      font-size: 0.8rem;
+      width: 100px;
+      position: absolute;
+      background-color: white;
+      list-style: none;
+      top: -10px;
+      right: calc(100% + 8px);
+      text-align: center;
+      box-shadow: 0px 0px 4px;
+      border-radius: 4px;
+      padding: 2px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      outline: none;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+
+      &:focus {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .single-option {
+        padding: 3px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--border-color);
+        }
+      }
+    }
+  }
+}

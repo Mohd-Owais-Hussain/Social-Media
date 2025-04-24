@@ -1,15 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosClient } from "../../utils/axiosClient";
 import { likeAndUnlikePost } from "./postsSlice";
+import { showToast } from "./appConfigSlice";
+import { TOAST_SUCCESS } from "../../App";
 
 export const getFeedData = createAsyncThunk("user/getFeedData", async () => {
   try {
     const response = await axiosClient.get("/user/getFeedData");
-    if (response.data) {
-      return response.data.result;
-    } else {
-      return response.result;
-    }
+
+    return response.data ? response.data.result : response.result;
   } catch (e) {
     return Promise.reject(e);
   }
@@ -17,14 +16,29 @@ export const getFeedData = createAsyncThunk("user/getFeedData", async () => {
 
 export const followAndUnfollowUser = createAsyncThunk(
   "user/followAndUnfollow",
-  async (body) => {
+  async (body, { dispatch }) => {
     try {
-      const response = await axiosClient.post("/user/follow", body);
-      if (response.data) {
-        return response.data.result.user;
-      } else {
-        return response.result.user;
-      }
+      const { userIdToFollow, myProfileId } = body;
+      const response = await axiosClient.post("/user/follow", {
+        userIdToFollow,
+      });
+
+      const user = response.data
+        ? response.data.result.user
+        : response.result.user;
+
+      const isFollowing = user.followers.includes(myProfileId);
+
+      dispatch(
+        showToast({
+          type: TOAST_SUCCESS,
+          message: `You ${isFollowing ? "followed" : "unfollowed"} ${
+            user.name
+          }`,
+        })
+      );
+
+      return user;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -35,6 +49,17 @@ const feedSlice = createSlice({
   name: "feedSlice",
   initialState: {
     feedData: {},
+  },
+  reducers: {
+    updateCommentCountInFeed: (state, action) => {
+      const comment = action.payload;
+      const postIndex = state?.feedData?.posts?.findIndex(
+        (post) => post._id === comment.post
+      );
+      if (postIndex !== -1) {
+        state.feedData.posts[postIndex].commentsCount += 1;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -70,3 +95,5 @@ const feedSlice = createSlice({
 });
 
 export default feedSlice.reducer;
+
+export const { updateCommentCountInFeed } = feedSlice.actions;

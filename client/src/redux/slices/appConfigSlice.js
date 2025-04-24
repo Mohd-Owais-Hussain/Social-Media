@@ -1,14 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosClient } from "../../utils/axiosClient";
+import { TOAST_SUCCESS } from "../../App";
 
 export const getMyInfo = createAsyncThunk("user/getMyInfo", async () => {
   try {
     const response = await axiosClient.get("/user/getMyInfo");
-    if (response.data) {
-      return response.data.result;
-    } else {
-      return response.result;
-    }
+
+    return response.data ? response.data.result : response.result;
   } catch (e) {
     return Promise.reject(e);
   }
@@ -16,14 +14,18 @@ export const getMyInfo = createAsyncThunk("user/getMyInfo", async () => {
 
 export const updateMyProfile = createAsyncThunk(
   "user/updateMyProfile",
-  async (body) => {
+  async (body, { dispatch }) => {
     try {
       const response = await axiosClient.put("/user/", body);
-      if (response.data) {
-        return response.data.result;
-      } else {
-        return response.result;
-      }
+
+      dispatch(
+        showToast({
+          type: TOAST_SUCCESS,
+          message: "Profile updated",
+        })
+      );
+
+      return response.data ? response.data.result : response.result;
     } catch (e) {
       return Promise.reject(e);
     }

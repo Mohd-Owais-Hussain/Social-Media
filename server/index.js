@@ -3,6 +3,7 @@ const dbConnect = require("./dbConnect");
 const authRouter = require("./routers/authRouter");
 const postsRouter = require("./routers/postsRouter");
 const userRouter = require("./routers/userRouter");
+const commentRouter = require("./routers/commentRouter");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
@@ -32,6 +33,7 @@ app.use(
 app.use("/auth", authRouter);
 app.use("/posts", postsRouter);
 app.use("/user", userRouter);
+app.use("/comment", commentRouter);
 
 const PORT = process.env.PORT || 4001;
 

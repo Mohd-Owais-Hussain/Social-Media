@@ -48,13 +48,13 @@ function App() {
       <Routes>
         <Route element={<RequireUser />}>
           <Route element={<Home />}>
-            <Route path="/" element={<Feed />} />
+            <Route path="/home" element={<Feed />} />
             <Route path="/profile/:userId" element={<Profile />} />
             <Route path="/updateProfile" element={<UpdateProfile />} />
           </Route>
         </Route>
         <Route element={<OnlyIfNotLoggedIn />}>
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Route>
       </Routes>

@@ -3,10 +3,11 @@ import "./UpdateProfile.scss";
 import dummyUserImg from "../../assets/user.png";
 import ConfirmDeletion from "../confirm-account-deletion/ConfirmDeletion";
 import { useSelector, useDispatch } from "react-redux";
-import { updateMyProfile } from "../../redux/slices/appConfigSlice";
+import { showToast, updateMyProfile } from "../../redux/slices/appConfigSlice";
 import { useNavigate } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
 import { KEY_ACCESS_TOKEN, removeItem } from "../../utils/localStorageManager";
+import { TOAST_SUCCESS } from "../../App";
 
 function UpdateProfile() {
   const navigate = useNavigate();
@@ -50,8 +51,14 @@ function UpdateProfile() {
   async function handleDeleteAccount() {
     try {
       await axiosClient.delete("/user/");
+      dispatch(
+        showToast({
+          type: TOAST_SUCCESS,
+          message: "Account deleted",
+        })
+      );
       removeItem(KEY_ACCESS_TOKEN);
-      navigate("/login");
+      navigate("/");
     } catch (e) {
       console.log("Error -> ", e);
     }
