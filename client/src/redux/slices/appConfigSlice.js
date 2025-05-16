@@ -6,7 +6,7 @@ export const getMyInfo = createAsyncThunk("user/getMyInfo", async () => {
   try {
     const response = await axiosClient.get("/user/getMyInfo");
 
-    return response.data ? response.data.result : response.result;
+    return response.result;
   } catch (e) {
     return Promise.reject(e);
   }
@@ -25,7 +25,7 @@ export const updateMyProfile = createAsyncThunk(
         })
       );
 
-      return response.data ? response.data.result : response.result;
+      return response.result;
     } catch (e) {
       return Promise.reject(e);
     }

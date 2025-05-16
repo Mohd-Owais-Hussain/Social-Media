@@ -13,7 +13,7 @@ export const getPostComments = createAsyncThunk(
         params: { postId: body },
       });
 
-      return response.data ? response.data.result : response.result;
+      return response.result;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -25,6 +25,7 @@ export const createComment = createAsyncThunk(
   async (body, { dispatch }) => {
     try {
       const response = await axiosClient.post("/comment/", body);
+
       dispatch(
         showToast({
           type: TOAST_SUCCESS,
@@ -32,22 +33,21 @@ export const createComment = createAsyncThunk(
         })
       );
 
-      const result = response.data ? response.data.result : response.result;
-
       dispatch(
         updateCommentCountInFeed({
-          comment: result,
-          direction: "increase",
-        })
-      );
-      dispatch(
-        updateCommentCountInUserProfile({
-          comment: result,
+          comment: response.result,
           direction: "increase",
         })
       );
 
-      return result;
+      dispatch(
+        updateCommentCountInUserProfile({
+          comment: response.result,
+          direction: "increase",
+        })
+      );
+
+      return response.result;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -61,6 +61,7 @@ export const deleteComment = createAsyncThunk(
       const response = await axiosClient.delete("/comment/", {
         params: { commentId: body },
       });
+      
       dispatch(
         showToast({
           type: TOAST_SUCCESS,
@@ -68,22 +69,21 @@ export const deleteComment = createAsyncThunk(
         })
       );
 
-      const result = response.data ? response.data.result : response.result;
-
       dispatch(
         updateCommentCountInFeed({
-          comment: result,
+          comment: response.result,
           direction: "decrease",
         })
       );
+      
       dispatch(
         updateCommentCountInUserProfile({
-          comment: result,
+          comment: response.result,
           direction: "decrease",
         })
       );
 
-      return result;
+      return response.result;
     } catch (e) {
       return Promise.reject(e);
     }

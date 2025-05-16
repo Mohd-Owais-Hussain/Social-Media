@@ -24,10 +24,10 @@ axiosClient.interceptors.request.use(async (request) => {
 axiosClient.interceptors.response.use(
   async (response) => {
     const { default: store } = await import("../redux/store");
-    store.dispatch(setLoading(false));
-
+    
     const data = response.data;
     if (data.status === "ok") {
+      store.dispatch(setLoading(false));
       return data;
     }
 
@@ -36,6 +36,7 @@ axiosClient.interceptors.response.use(
     const error = data.message;
 
     if (error !== "Invalid access key") {
+      store.dispatch(setLoading(false));
       store.dispatch(
         showToast({
           type: TOAST_FAILURE,
@@ -45,20 +46,24 @@ axiosClient.interceptors.response.use(
     }
 
     if (statusCode === 401 && !originalRequest._retry) {
-      const response = await axios
+      originalRequest._retry = true;
+
+      const refreshResponse = await axios
         .create({
           withCredentials: true,
         })
         .get(`${process.env.REACT_APP_SERVER_BASE_URL}/auth/refresh`);
 
-      if (response.data.status === "ok") {
-        setItem(KEY_ACCESS_TOKEN, response.data.result.accessToken);
+      if (refreshResponse.data.status === "ok") {
+        setItem(KEY_ACCESS_TOKEN, refreshResponse.data.result.accessToken);
+
         originalRequest.headers[
           "Authorization"
-        ] = `Bearer ${response.data.result.accessToken}`;
+        ] = `Bearer ${refreshResponse.data.result.accessToken}`;
 
-        return axios(originalRequest);
+        return axiosClient(originalRequest);
       } else {
+        store.dispatch(setLoading(false));
         removeItem(KEY_ACCESS_TOKEN);
         window.location.replace("/", "_self");
         return Promise.reject(error);
@@ -76,6 +81,7 @@ axiosClient.interceptors.response.use(
         message: error.message,
       })
     );
+    
     return Promise.reject(error);
   }
 );

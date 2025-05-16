@@ -24,7 +24,8 @@ const followOrUnfollowUserController = async (req, res) => {
     if (curUser.followings.includes(userIdToFollow)) {
       const followingIndex = curUser.followings.indexOf(userIdToFollow);
       curUser.followings.splice(followingIndex, 1);
-      const followerIndex = userToFollow.followers.indexOf(curUser);
+
+      const followerIndex = userToFollow.followers.indexOf(curUserId);
       userToFollow.followers.splice(followerIndex, 1);
     } else {
       userToFollow.followers.push(curUserId);
@@ -65,6 +66,7 @@ const getPostsOfFollowing = async (req, res) => {
         $nin: followingsIds,
       },
     });
+
     return res.send(success(200, { ...curUser._doc, suggestions, posts }));
   } catch (e) {
     return res.send(error(500, e.message));
@@ -77,9 +79,10 @@ const getMyPosts = async (req, res) => {
     const allUserPosts = await Post.find({
       owner: curUserId,
     }).populate("likes");
+
     return res.send(success(200, { allUserPosts }));
   } catch (e) {
-    return res.send(500, e.message);
+    return res.send(error(500, e.message));
   }
 };
 
@@ -93,9 +96,10 @@ const getUserPosts = async (req, res) => {
     const allUserPosts = await Post.find({
       owner: userId,
     }).populate("likes");
+
     return res.send(success(200, { allUserPosts }));
   } catch (e) {
-    return res.send(500, e.message);
+    return res.send(error(500, e.message));
   }
 };
 
@@ -107,9 +111,10 @@ const deleteMyProfile = async (req, res) => {
     const userPosts = await Post.find({ owner: curUserId });
     for (const post of userPosts) {
       await Comment.deleteMany({ post: post._id });
-    }
 
-    await Post.deleteMany({ owner: curUserId });
+      await cloudinary.uploader.destroy(post.image.publicId);
+      await post.deleteOne();
+    }
 
     for (const followerId of curUser.followers) {
       const follower = await User.findById(followerId);
@@ -155,6 +160,10 @@ const deleteMyProfile = async (req, res) => {
 
     await Comment.deleteMany({ owner: curUserId });
 
+    if (curUser.avatar?.publicId) {
+      await cloudinary.uploader.destroy(curUser.avatar.publicId);
+    }
+
     await curUser.deleteOne();
 
     res.clearCookie("jwt", {
@@ -180,16 +189,26 @@ const getMyInfo = async (req, res) => {
 
 const updateUserProfile = async (req, res) => {
   try {
-    const { name, bio, userImg } = req.body;
+    const { userImg } = req.body;
+    let { name, bio } = req.body;
+    console.log("name->", name, "bio->", bio, "userImg->", userImg);
+    name = name.trim();
+    bio = bio.trim();
 
     const user = await User.findById(req._id);
 
+    const oldImgPublicId = user.avatar?.publicId;
+
     if (name) {
       user.name = name;
+    } else {
+      return res.send(error(400, "Name can't be empty"));
     }
-    if (bio) {
+
+    if (bio !== undefined && bio !== null) {
       user.bio = bio;
     }
+
     if (userImg) {
       const cloudImg = await cloudinary.uploader.upload(userImg, {
         folder: "profileImg",
@@ -199,7 +218,13 @@ const updateUserProfile = async (req, res) => {
         publicId: cloudImg.public_id,
       };
     }
+
+    if (oldImgPublicId) {
+      await cloudinary.uploader.destroy(oldImgPublicId);
+    }
+
     await user.save();
+    console.log("user", user);
     return res.send(success(200, { user }));
   } catch (e) {
     return res.send(error(500, e.message));
@@ -209,12 +234,21 @@ const updateUserProfile = async (req, res) => {
 const getUserProfile = async (req, res) => {
   try {
     const userId = req.body.userId;
+
+    if (!userId) {
+      return res.send(error(404, "User Id is required"));
+    }
+
     const user = await User.findById(userId).populate({
       path: "posts",
       populate: {
         path: "owner",
       },
     });
+
+    if (!user) {
+      return res.send(error(404, "User not found"));
+    }
 
     const fullPosts = user.posts;
     const posts = fullPosts

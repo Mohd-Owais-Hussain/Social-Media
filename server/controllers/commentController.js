@@ -53,6 +53,11 @@ const deleteCommentController = async (req, res) => {
     }
 
     const post = await Post.findById(comment.post);
+
+    if (!post) {
+      return res.send(error(404,"Associated post not found"))
+    }
+
     const index = post.comments.indexOf(comment._id);
     if (index !== -1) {
       post.comments.splice(index, 1);

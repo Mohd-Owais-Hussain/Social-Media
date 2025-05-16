@@ -8,7 +8,7 @@ export const getFeedData = createAsyncThunk("user/getFeedData", async () => {
   try {
     const response = await axiosClient.get("/user/getFeedData");
 
-    return response.data ? response.data.result : response.result;
+    return response.result;
   } catch (e) {
     return Promise.reject(e);
   }
@@ -23,18 +23,14 @@ export const followAndUnfollowUser = createAsyncThunk(
         userIdToFollow,
       });
 
-      const user = response.data
-        ? response.data.result.user
-        : response.result.user;
+      const user = response.result.user;
 
       const isFollowing = user.followers.includes(myProfileId);
 
       dispatch(
         showToast({
           type: TOAST_SUCCESS,
-          message: `You ${isFollowing ? "followed" : "unfollowed"} ${
-            user.name
-          }`,
+          message: `You ${isFollowing ? "followed" : "unfollowed"} ${ user.name }`,
         })
       );
 

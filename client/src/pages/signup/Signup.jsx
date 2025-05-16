@@ -3,8 +3,12 @@ import "./Signup.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
 import { KEY_ACCESS_TOKEN, setItem } from "../../utils/localStorageManager";
+import { useDispatch } from "react-redux";
+import { showToast } from "../../redux/slices/appConfigSlice";
+import { TOAST_SUCCESS } from "../../App";
 
 function Signup() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -23,6 +27,12 @@ function Signup() {
         email,
         password,
       });
+      dispatch(
+        showToast({
+          type: TOAST_SUCCESS,
+          message: "Welcome to LinkUp!",
+        })
+      );
       setItem(KEY_ACCESS_TOKEN, response.result.accessToken);
       navigate("/home");
     } catch (e) {

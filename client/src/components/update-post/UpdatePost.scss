@@ -75,10 +75,7 @@
       }
 
       .update-post-form {
-        margin: 10px;
         display: flex;
-        border: 1px solid #aaa;
-        border-radius: 4px;
 
         .update-post-input {
           flex: 1;
@@ -87,7 +84,6 @@
           border: none;
           outline: none;
           color: #555;
-          border-radius: 4px;
         }
 
         .submit-update-post-btn {

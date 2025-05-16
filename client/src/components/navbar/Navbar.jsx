@@ -17,7 +17,7 @@ function Navbar() {
       await axiosClient.post("/auth/logout");
       removeItem(KEY_ACCESS_TOKEN);
       navigate("/");
-    } catch (e) {}
+    } catch (e) { }
   }
 
   return (
@@ -29,7 +29,7 @@ function Navbar() {
             location.pathname !== "/home" ? navigate("/home") : navigate(0)
           }
         >
-          Social Media
+          LinkUp
         </h2>
         <div className="right-side">
           <div

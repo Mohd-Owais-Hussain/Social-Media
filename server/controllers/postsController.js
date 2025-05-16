@@ -110,6 +110,8 @@ const deletePostController = async (req, res) => {
       curUser.posts.splice(index, 1);
     }
     await curUser.save();
+
+    await cloudinary.uploader.destroy(post.image.publicId);
     await post.deleteOne();
 
     return res.send(success(200, post._id));

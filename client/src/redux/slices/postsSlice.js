@@ -9,7 +9,7 @@ export const getUserProfile = createAsyncThunk(
     try {
       const response = await axiosClient.post("/user/getUserProfile", body);
 
-      return response.data ? response.data.result : response.result;
+      return response.result;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -22,9 +22,7 @@ export const likeAndUnlikePost = createAsyncThunk(
     try {
       const response = await axiosClient.post("/posts/like", body);
 
-      const post = response.data
-        ? response.data.result.post
-        : response.result.post;
+      const post = response.result.post;
 
       dispatch(
         showToast({
@@ -55,7 +53,7 @@ export const updatePost = createAsyncThunk(
         })
       );
 
-      return response.data ? response.data.result.post : response.result.post;
+      return response.result.post;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -77,7 +75,7 @@ export const deletePost = createAsyncThunk(
         })
       );
 
-      return response.data ? response.data.result : response.result;
+      return response.result;
     } catch (e) {
       return Promise.reject(e);
     }
